@@ -1,0 +1,162 @@
+- Class: meta
+  Course: Swirl_Contingency_Analysis
+  Lesson: Contingency Analysis
+  Author: J. Stephen Gosnell
+  Type: Standard
+  Organization: Baruch College, City University of New York
+  Version: 2.4.3
+
+- Class: text
+  Output: Welcome to Swirl! This interface will help review some of the code we've used in class.
+
+- Class: text
+  Output: Today we'll review how to compare discrete data from multiple groups/populations and/or that contains more than 2 categories. We'll also carry out relevant post-hoc tests.  There are many ways to do this in R, but we'll focus on using the chisq.test command.
+
+- Class: mult_question
+  Output: First, consider a situation where we have counts from one population.  If we only had 2 categories of outcomes (counts), which test would we likely use?
+  AnswerChoices: binomial test; t-test; z-test
+  CorrectAnswer: binomial test
+  AnswerTests: omnitest(correctVal='binomial test')
+  Hint: Try again. Which test uses discrete (count) data from only 2 categories?
+
+- Class: text
+  Output: Yes, a binomial test allows us to test the proportion for some factor in a group. However, that limits us to two outcomes, and we often have more than that. 
+
+- Class: cmd_question
+  Output: To consider this, we'll use the built-in HairEyeColor dataset in R.  Take a look at it now by using HairEyeColor.
+  CorrectAnswer: HairEyeColor
+  AnswerTests: omnitest(correctExpr='HairEyeColor')
+  Hint: Try HairEyeColor.
+
+- Class: text
+  Output: The dataset comes in tabulated (table) form and notes the numbers of students with black, brown, red, and blond hair that have brown, blue, hazel, or green eyes. Note the data is also divided by males and females.  
+
+- Class: mult_question
+  Output: First, let's consider males with black hair. Is eye color random across this group, or are some colors more/less common?  If eye color was evently split among the 4 options (brown, blue, hazel, green), what proportion of students would have each eye color?
+  AnswerChoices: 1/4; 1/2; I'm not sure
+  CorrectAnswer: 1/4
+  AnswerTests: omnitest(correctVal='1/4')
+  Hint: Think about it. If we have four options and assume eye color is uniformly distributed, what proportion of students should have each eye color?
+
+- Class: cmd_question
+  Output: This is an example of determining if data fits a certain distribution, which is what we use the chi square test for. In this case we can see if eye color is uniformly distributed. We use the chisq.test function, which requires a list of data and set of probabilities to test them against. In our case, we can use chisq.test(x = c(32,11,10,3), p = c(1/4, 1/4,1/4, 1/4)). Try it.  
+  CorrectAnswer: chisq.test(x = c(32,11,10,3), p = c(1/4, 1/4,1/4, 1/4))
+  AnswerTests: omnitest(correctExpr='chisq.test(x = c(32,11,10,3), p = c(1/4, 1/4,1/4, 1/4))')
+  Hint: Try chisq.test(x = c(32,11,10,3), p = c(1/4, 1/4,1/4, 1/4)).
+
+- Class: mult_question
+  Output: Find the p-value in your output. What is it?
+  AnswerChoices: <.001; .23; .5
+  CorrectAnswer: <.001
+  AnswerTests: omnitest(correctVal='<.001')
+
+- Class: mult_question
+  Output: Our p-value was less than .05, so we reject the null hypothesis. What was our  null?
+  AnswerChoices: eye color is uniformly distrubuted; eye color is not uniformly distributed; I'm not sure
+  CorrectAnswer: eye color is uniformly distrubuted
+  AnswerTests: omnitest(correctVal='eye color is uniformly distrubuted')
+
+- Class: text
+  Output: Correct. So we now reject that hypothesis and believe eye color is not uniformly distributed. 
+
+- Class: cmd_question
+  Output: This example has focused on uniform data,but the chi-square test checks for differences between any observed and expected outcomes. This means we can change the test to reflect other expectations. The only requirement is that our expected outcomes are not less than 5 for more than 20% of the categories and less than 1 for none of them. One way to test this is to add $expected after the chi-square function call. Try  chisq.test(x = c(32,11,10,3), p = c(1/4, 1/4,1/4, 1/4))$expected.
+  CorrectAnswer:  chisq.test(x = c(32,11,10,3), p = c(1/4, 1/4,1/4, 1/4))$expected
+  AnswerTests: omnitest(correctExpr=' chisq.test(x = c(32,11,10,3), p = c(1/4, 1/4,1/4, 1/4))$expected')
+  Hint: Try  chisq.test(x = c(32,11,10,3), p = c(1/4, 1/4,1/4, 1/4))$expected.
+
+- Class: text
+  Output: Since all expected values are greater than 5, we are safe to use the chi-square test. IF this wasn't true we would need to combine groups into larger categories.
+
+- Class: text
+  Output: The same function allows us to consider differences in how counts among two or more populations.  For example, we could ask if eye color is distributed the same among females with different hair color.  Our null hypothesis here is that eye color is independent of hair color.
+
+- Class: cmd_question
+  Output: The command is the same, except this time we have to enter a matrix of data, where each row represents one population, and we don't have to enter probabilities since the test automatically consideres independence among the variables (rows and columns). First, lets make the matrix. The function for this is matrix, and it requires a list of data, a number of rows to create from it, plus an argument on if data was entered by row (byrow) or column.  Let's make an object from the matrix named hair_eye.  Try hair_eye <- matrix(c(36, 9, 5, 2, 66, 34, 29, 14, 16, 7, 7, 7, 4, 64, 5, 8), nrow = 4, byrow = T); make sure you can interpret this! 
+  CorrectAnswer: hair_eye <- matrix(c(36, 9, 5, 2, 66, 34, 29, 14, 16, 7, 7, 7, 4, 64, 5, 8), nrow = 4, byrow = T)
+  AnswerTests: omnitest(correctExpr='hair_eye <- matrix(c(36, 9, 5, 2, 66, 34, 29, 14, 16, 7, 7, 7, 4, 64, 5, 8), nrow = 4, byrow = T)')
+  Hint: Try hair_eye <- matrix(c(36, 9, 5, 2, 66, 34, 29, 14, 16, 7, 7, 7, 4, 64, 5, 8), nrow = 4, byrow = T). Make sure you understand what this is doing!
+
+- Class: cmd_question
+  Output: That was the hard part. Now just run the chisq.test function and give it the matrix you created as an argument.  
+  CorrectAnswer: chisq.test(hair_eye)
+  AnswerTests: omnitest(correctExpr='chisq.test(hair_eye)')
+  Hint: chisq.test(hair_eye)
+  
+  
+- Class: cmd_question
+  Output: Before we check the p-value, note R is warning you the test may have issues. Check that our assumptions are met using chisq.test(hair_eye)$expected.
+  CorrectAnswer: chisq.test(hair_eye)$expected
+  AnswerTests: omnitest(correctExpr='chisq.test(hair_eye)$expected')
+  Hint: Try chisq.test(hair_eye)$expected.
+
+- Class: mult_question
+  Output: Since no group is less than 1 and only 1 is less than 5, we can proceed. Now check the p-value. What does it suggest?
+  AnswerChoices: reject the null; fail to reject the null; not sure
+  CorrectAnswer: reject the null
+  AnswerTests: omnitest(correctVal='reject the null')
+  Hint: Type a hint.
+
+- Class: text
+  Output: So we reject the null hypothesis, meaning the distribution of eye color depends on hair color. Since we had more than 2 hair colors, an obvious question is are they all different from each other, or are only some different.  This requires a post-hoc test, meaning we look for differences among pairs of the data given we know at least one group is different.  One way to do this that returns easily read results is to turn  your matrix into a table (so it can have row and column names), then use the pairwiseNominalIndependence function from the rcompanion library.  
+
+- Class: cmd_question
+  Output: First, use the as.table function to turn your heart_eye matrix into a table. Call it hair_eye_table
+  CorrectAnswer: hair_eye_table <- as.table(hair_eye)
+  AnswerTests: omnitest(correctExpr='hair_eye_table <- as.table(hair_eye)')
+  Hint: Try hair_eye_table <- as.table(hair_eye).
+
+- Class: cmd_question
+  Output: Now use the rownames function to add row names that correspond to each hair type. Try rownames(hair_eye_table) <- c("black", "brown", "red", "blonde").
+  CorrectAnswer: rownames(hair_eye_table) <- c("black", "brown", "red", "blonde")
+  AnswerTests: omnitest(correctExpr='rownames(hair_eye_table) <- c("black", "brown", "red", "blonde")')
+  Hint: Try rownames(hair_eye_table) <- c("black", "brown", "red", "blonde").
+
+- Class: cmd_question
+  Output: Now use the pairwiseNominalIndependence function. It requires your table and a method to correct p-values by.  Remember, we need to adjust the p-values from our post-hoc tests because we are carrying out multiple tests, so our chances of a type 1 error increase!  Try pairwiseNominalIndependence(hair_eye_table, method = "holm").
+  CorrectAnswer: pairwiseNominalIndependence(hair_eye_table, method = "holm")
+  AnswerTests: omnitest(correctExpr='pairwiseNominalIndependence(hair_eye_table, method = "holm")')
+  Hint: Try pairwiseNominalIndependence(hair_eye_table, method = "holm").
+
+- Class: text
+  Output: The resulting table has raw (p.) and adjusted(p.adj.) p-values for each group comparison from several tests. Let's focus on the p.adj.Chisq column. Note the exponents.  Any value below .05 means we can reject the null hypothesis that those 2 groups have the same distribution of eye color.   
+
+- Class: mult_question
+  Output: Which of the following pairs appear to differ in eye color distribution?
+  AnswerChoices: black:blonde; black:brown; black:red
+  CorrectAnswer: black:blonde
+  AnswerTests: omnitest(correctVal='black:blonde')
+  Hint: Try again. Which of these pairs has an adjusted p-value that is less than .05?
+
+- Class: mult_question
+  Output: Which of the following pairs appear to not differ in eye color distribution?
+  AnswerChoices: black:blonde; black:brown; red:blonde
+  CorrectAnswer: black:brown
+  AnswerTests: omnitest(correctVal='black:brown')
+  Hint: Try again. Which of these pairs has an adjusted p-value that is greater than .05?
+
+- Class: cmd_question
+  Output: Good job. Everything was ok here despite R yelling at us about the chi-squared approximation. Remember our assumptions (no groups with expected value of <1, and no more than 20% of groups with expected value < 5).  You can check them using chisq.test(hair_eye)$expected.
+  CorrectAnswer: chisq.test(hair_eye)$expected
+  AnswerTests: omnitest(correctExpr='chisq.test(hair_eye)$expected')
+  Hint: Try chisq.test(hair_eye)$expected.
+
+- Class: cmd_question
+  Output: Although we met our assumptions, if we didn't (or if we wanted to use an exact test instead of relying on distributions), we can instead use the fisher.test function. It requires your count data (hair_eye). It also runs better if you add the argument simulate.p.value = T for tables that are larger than 2 x 2 (2 rows and 2 columns); otherwise the computer may not be able to compute all the possible outcomes. Try it. 
+  CorrectAnswer: fisher.test(hair_eye, simulate.p.value = T)
+  AnswerTests: omnitest(correctExpr='fisher.test(hair_eye, simulate.p.value = T)')
+  Hint: Try fisher.test(hair_eye, simulate.p.value = T).
+
+- Class: text
+  Output: For 2x2 tables that don't match our chi-squared assumptions, you can use a Fisher test but leave out the simulate.p.value argument. 
+  
+- Class: cmd_question
+  Output: A final option for this type of tests, the G-test, uses likelihood estimation instead of sampling methods.  The function to conduct these tests is GTest in the DescTools package. Load the package and try it.  
+  CorrectAnswer: GTest(hair_eye)
+  AnswerTests: omnitest(correctExpr='GTest(hair_eye)')
+  Hint: Try GTest(hair_eye).  
+
+- Class: text
+  Output: This concludes our lesson chi-squared tests. Make sure you understand these are also known as goodness of fit tests and can be used anytime we have count data and something to compare it to. 
+
+
