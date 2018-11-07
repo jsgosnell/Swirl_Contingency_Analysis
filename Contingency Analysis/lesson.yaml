@@ -113,7 +113,7 @@
   Hint: Try rownames(hair_eye_table) <- c("black", "brown", "red", "blonde").
 
 - Class: cmd_question
-  Output: Now use the pairwiseNominalIndependence function. It requires your table and a method to correct p-values by.  Remember, we need to adjust the p-values from our post-hoc tests because we are carrying out multiple tests, so our chances of a type 1 error increase!  Try pairwiseNominalIndependence(hair_eye_table, method = "holm").
+  Output: Now use the pairwiseNominalIndependence function from the rcompanion package. It requires your table and a method to correct p-values by.  Remember, we need to adjust the p-values from our post-hoc tests because we are carrying out multiple tests, so our chances of a type 1 error increase!  Try pairwiseNominalIndependence(hair_eye_table, method = "holm").
   CorrectAnswer: pairwiseNominalIndependence(hair_eye_table, method = "holm")
   AnswerTests: omnitest(correctExpr='pairwiseNominalIndependence(hair_eye_table, method = "holm")')
   Hint: Try pairwiseNominalIndependence(hair_eye_table, method = "holm").
